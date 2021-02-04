@@ -1,0 +1,23 @@
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/codesqu1/apiministoriez2.code-square.net"
+PassengerBaseURI "/"
+PassengerNodejs "/home/codesqu1/nodevenv/apiministoriez2.code-square.net/10/bin/node"
+PassengerAppType node
+PassengerStartupFile apiministoriez2.code-square.net/dist/main.js
+PassengerAppLogFile "/home/codesqu1/log-mini/mini.log"
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
+RewriteEngine On
+RewriteCond %{HTTPS} off
+# First rewrite to HTTPS:
+# Don't put www. here. If it is already there it will be included, if not
+# the subsequent rule will catch it.
+RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# Now, rewrite any request to the wrong domain to use www.
+# [NC] is a case-insensitive match
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteRule .* https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+RewriteRule ^$ http://127.0.0.1:58743/ [P,L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ http://127.0.0.1:58743/$1 [P,L]
+DirectoryIndex disabled
